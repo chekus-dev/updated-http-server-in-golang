@@ -1,4 +1,4 @@
-# 🚀 Simple Go JSON API Server
+#  Simple Go JSON API Server
 
 Hey there! This is a minimal, lightweight HTTP server written in Go that serves data in JSON format instead of traditional HTML. It is a perfect starting point if you are looking to build web APIs, microservices, or backends for frontend frameworks like React, Vue, or mobile apps.
 
