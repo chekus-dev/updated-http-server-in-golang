@@ -62,10 +62,3 @@ To execute the table-driven test suite, save the test code to `main_test.go` and
 go test -v
 ```
 
----
-
-## What's Happening Under the Hood?
-
-1. **Routing**: `http.HandleFunc("/user", UserHandler)` isolates user queries to a clean endpoint route.
-2. **Input Validation**: `strconv.Atoi()` attempts to parse the URL string ID safely into an integer. If a user provides an invalid type (like `?id=abc`), the program blocks execution and safely errors out.
-3. **Implicit 200 OK Status**: Instead of redundantly writing `w.WriteHeader(http.StatusOK)`, the Go runtime infers a successful transaction as soon as `json.NewEncoder(w).Encode()` writes to the response body pipe.
