@@ -32,6 +32,6 @@ func main() {
 	http.HandleFunc("/", HomePage)
 	log.Println("starting application/json on localhost:8080")
 	if err := http.ListenAndServe(":8080", nil); err != nil {
-		log.Fatalf("server failed to stsrt: %v", err)
+		log.Fatalf("server failed to start: %v", err)
 	}
 }
