@@ -17,7 +17,7 @@ func HomePage(w http.ResponseWriter, res *http.Request) {
 
 	user := Message{
 		ID:    1,
-		Name:  "chekus joseph",
+		Name:  "chekus-dev",
 		Email: "okaforchekus@gmail.com",
 	}
 	if err := json.NewEncoder(w).Encode(user); err != nil {
