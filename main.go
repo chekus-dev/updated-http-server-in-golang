@@ -2,7 +2,7 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
+	"log"
 	"net/http"
 )
 
@@ -28,7 +28,7 @@ func HomePage(w http.ResponseWriter, res *http.Request) {
 
 func main() {
 	http.HandleFunc("/", HomePage)
-	fmt.Println("starting application/json on localhost:8080")
+	log.Println("starting application/json on localhost:8080")
 	err := http.ListenAndServe(":8080", nil)
 	if err != nil {
 		panic(err)
