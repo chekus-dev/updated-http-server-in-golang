@@ -6,31 +6,32 @@ import (
 	"net/http"
 )
 
-type WelcomeMessage struct {
-	Message string `json:"messgae"`
+type Message struct {
+	Message string `json:"message"`
 	Reply   string `json:"Reply"`
-	Answer  string `json:"message"`
+	Answer  string `json:"answer"`
 	Status  int    `json:"status"`
 }
 
 func HomePage(w http.ResponseWriter, res *http.Request) {
 	w.Header().Set("content-type", "application/json")
 
-	data := WelcomeMessage{
-		Message: "welcome dear user to updated http server in go, JSON data!",
-		Reply:   "thank you, JSON data!",
-		Answer:  "How can we be of help, JSON data!",
+	data := Message{
+		Message: "welcome dear user to updated http server in go",
+		Reply:   "thank you",
+		Answer:  "How can we be of help",
 		Status:  200,
 	}
-
-	json.NewEncoder(w).Encode(data)
+	w.WriteHeader(http.StatusCreated)
+	if err := json.NewEncoder(w).Encode(data); err != nil {
+		log.Printf("failed to encode response: %v", err)
+	}
 }
 
 func main() {
 	http.HandleFunc("/", HomePage)
 	log.Println("starting application/json on localhost:8080")
-	err := http.ListenAndServe(":8080", nil)
-	if err != nil {
-		panic(err)
+	if err := http.ListenAndServe(":8080", nil); err != nil {
+		log.Fatalf("server failed to stsrt: %v", err)
 	}
 }
