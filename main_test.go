@@ -40,8 +40,8 @@ func TestHomePage(t *testing.T) {
 		t.Errorf("Expected ID 1, got %d", user.ID)
 	}
 
-	if user.Name != "chekus joseph" {
-		t.Errorf("Expected Name 'chekus joseph', got %q", user.Name)
+	if user.Name != "chekus-dev" {
+		t.Errorf("Expected Name 'chekus-dev', got %q", user.Name)
 	}
 
 	if user.Email != "okaforchekus@gmail.com" {
