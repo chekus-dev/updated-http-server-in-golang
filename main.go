@@ -7,20 +7,20 @@ import (
 )
 
 type Message struct {
-	Message string `json:"message"`
-	Reply   string `json:"reply"`
-	Answer  string `json:"answer"`
+	ID    int    `json:"id"`
+	Name  string `json:"name"`
+	Email string `json:"email"`
 }
 
 func HomePage(w http.ResponseWriter, res *http.Request) {
 	w.Header().Set("content-Type", "application/json")
 
-	data := Message{
-		Message: "welcome dear user to updated http server in go",
-		Reply:   "thank you",
-		Answer:  "How can we be of help",
+	user := Message{
+		ID:    1,
+		Name:  "chekus joseph",
+		Email: "okaforchekus@gmail.com",
 	}
-	if err := json.NewEncoder(w).Encode(data); err != nil {
+	if err := json.NewEncoder(w).Encode(user); err != nil {
 		log.Printf("failed to encode response: %v", err)
 	}
 }
