@@ -1,23 +1,26 @@
-#  Simple Go JSON API Server
+# Simple Go JSON API Server
 
-Hey there! This is a minimal, lightweight HTTP server written in Go that serves data in JSON format instead of traditional HTML. It is a perfect starting point if you are looking to build web APIs, microservices, or backends for frontend frameworks like React, Vue, or mobile apps.
+Hey there! This is a dynamic, lightweight HTTP server written in Go that validates and serves user data in JSON format instead of traditional HTML. It includes a mock in-memory database lookup and robust automated unit testing.
 
 ---
 
 ## Features
 
-* **Zero Third-Party Dependencies**: Built entirely using Go's standard library (`net/http` and `encoding/json`).
-* **Proper Headers**: Automatically tells clients to expect JSON data by explicitly setting the `application/json` Content-Type.
-* **Streamlined Encoding**: Uses `json.NewEncoder` to stream data directly into the response writer, keeping memory usage low.
+* **Zero Third-Party Dependencies**: Built entirely using Go's standard library (`net/http`, `encoding/json`, and `strconv`).
+* **Dynamic Query Parameter Lookup**: Parses incoming requests to dynamically fetch specific users via URL flags (e.g., `/user?id=1`).
+* **Robust Error Handling**: Safely returns semantic HTTP status codes (`400 Bad Request`, `404 Not Found`) along with descriptive JSON error payloads.
+* **Streamlined Encoding**: Uses `json.NewEncoder` to stream data directly into the response writer, keeping memory usage ultra-low.
+* **Table-Driven Automated Tests**: Fully covered by memory-efficient HTTP unit tests using `net/http/httptest`.
 
 ---
 
-##  Project Structure
+## Project Structure
 
-The project maps data into a native Go struct before converting it to raw JSON:
+The project maps data models into native Go structs before converting them to raw JSON:
 
-* **`UserResponse`**: A custom Go structure specifying the shape of our data. 
-* **`json:"message"`**: Struct tags ensure our fields stay lowercase in the final JSON output, matching standard API conventions.
+* **`User`**: A custom Go structure specifying the shape of our data schema (`ID`, `Name`, `Email`).
+* **`json:"name"`**: Struct tags ensure field keys map to standardized lowercase attributes in the final JSON output.
+* **`userDatabase`**: An in-memory Go `map` that simulates database records for instant reading.
 
 ---
 
@@ -30,30 +33,39 @@ Make sure you have Go installed on your machine. Save the code into a file named
 go run main.go
 ```
 
-You should see this confirmation message in your terminal:
-> `Starting the server on port :8080`
+You should see this confirmation logging message in your terminal:
+> `starting server on localhost:8080`
 
-### 2. Test the API response
-While the server is running, open a separate terminal window and hit the server using `curl`:
+### 2. Test the API responses
+While the server is running, open a separate terminal window and query the server using `curl` to target different IDs:
 
+#### Fetching User 1:
 ```bash
-curl http://localhost:8080
+curl "http://localhost:8080/user?id=1"
 ```
-
 **Expected JSON Output:**
 ```json
 {
-  "message": "Welcome to updated http server in go with JSON,this is JSON data!",
-  "status": 200
+  "id": 1,
+  "name": "chekus joseph",
+  "email": "okaforchekus@gmail.com"
 }
 ```
 
-Alternatively, you can just open your browser and navigate to `http://localhost:8080` to see the text on your screen.
+## Running the Automated Tests
+
+The application uses professional Go testing idioms to evaluate routing, headers, success schemas, and validation errors without spinning up an actual network port.
+
+To execute the table-driven test suite, save the test code to `main_test.go` and run:
+
+```bash
+go test -v
+```
 
 ---
 
-##  What's Happening Under the Hood?
+## What's Happening Under the Hood?
 
-1. **Routing**: `http.HandleFunc("/", HomePage)` listens for any incoming web requests on the root path.
-2. **Setting Headers**: `w.Header().Set(...)` stops the browser from guessing the file type and forces it to parse the data purely as JSON.
-3. **Encoding Data**: Instead of creating a temporary string, `json.NewEncoder(w).Encode(data)` converts the Go struct directly into bytes and sends it across the network immediately for maximum performance.
+1. **Routing**: `http.HandleFunc("/user", UserHandler)` isolates user queries to a clean endpoint route.
+2. **Input Validation**: `strconv.Atoi()` attempts to parse the URL string ID safely into an integer. If a user provides an invalid type (like `?id=abc`), the program blocks execution and safely errors out.
+3. **Implicit 200 OK Status**: Instead of redundantly writing `w.WriteHeader(http.StatusOK)`, the Go runtime infers a successful transaction as soon as `json.NewEncoder(w).Encode()` writes to the response body pipe.
