@@ -9,7 +9,7 @@ import (
 func main() {
 	mux := http.NewServeMux()
 	mux.HandleFunc("/user", homeHandler)
-	mux.HandleFunc("/person", personHanlder)
+	mux.HandleFunc("/person", WriteJson)
 	log.Println("starting the server on port:8080")
 	if err := http.ListenAndServe(":8080", mux); err != nil {
 		log.Fatalf("failed to start server: %v", err)
@@ -17,19 +17,20 @@ func main() {
 
 }
 
-func personHanlder(w http.ResponseWriter, res *http.Request) {
+func WriteJson(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("content-Type", "application/json")
+	w.WriteHeader(http.StatusAccepted)
 
-	coding := personProfile{
+	profile := personProfile{
 		ID:    2,
 		Name:  "joseph",
 		Email: "okaforchekus@gmail.com",
 	}
-	if err := json.NewEncoder(w).Encode(coding); err != nil {
-		log.Printf("failed to encode coding: %v", err)
+	if err := json.NewEncoder(w).Encode(profile); err != nil {
+		log.Printf("failed to encode Json: %v", err)
+		return
 	}
 }
-
 
 type personProfile struct {
 	ID    int    `json:"id"`
@@ -37,9 +38,9 @@ type personProfile struct {
 	Email string `json:"email"`
 }
 
-
-func homeHandler(w http.ResponseWriter, res *http.Request) {
+func homeHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("content-Type", "application/json")
+	w.WriteHeader(http.StatusAccepted)
 
 	data := userProfile{
 		ID:    1,
@@ -47,8 +48,10 @@ func homeHandler(w http.ResponseWriter, res *http.Request) {
 		Age:   26,
 		Email: "chekusjoseph@gmail.com",
 	}
+
 	if err := json.NewEncoder(w).Encode(data); err != nil {
-		log.Printf("failed to encode data: %v", err)
+		log.Printf("failed to encode Json: %v", err)
+		return
 
 	}
 }
