@@ -6,17 +6,17 @@ import (
 	"net/http"
 )
 
-func main() {
-	mux := http.NewServeMux()
-	mux.HandleFunc("/user", homeHandler)
-	mux.HandleFunc("/person", WriteJson)
-	log.Println("starting the server on port:8080")
-	if err := http.ListenAndServe(":8080", mux); err != nil {
-		log.Fatalf("failed to start server: %v", err)
-	}
-
+type personProfile struct {
+	ID    int    `json:"id"`
+	Name  string `json:"name"`
+	Email string `json:"email"`
 }
-
+type userProfile struct {
+	ID    int    `json:"id"`
+	Name  string `json:"name"`
+	Age   int    `json:"age"`
+	Email string `json:"email"`
+}
 func WriteJson(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("content-Type", "application/json")
 	w.WriteHeader(http.StatusAccepted)
@@ -31,13 +31,6 @@ func WriteJson(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 }
-
-type personProfile struct {
-	ID    int    `json:"id"`
-	Name  string `json:"name"`
-	Email string `json:"email"`
-}
-
 func homeHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("content-Type", "application/json")
 	w.WriteHeader(http.StatusAccepted)
@@ -55,10 +48,13 @@ func homeHandler(w http.ResponseWriter, r *http.Request) {
 
 	}
 }
+func main() {
+	mux := http.NewServeMux()
+	mux.HandleFunc("/user", homeHandler)
+	mux.HandleFunc("/person", WriteJson)
+	log.Println("starting the server on port:8080")
+	if err := http.ListenAndServe(":8080", mux); err != nil {
+		log.Fatalf("failed to start server: %v", err)
+	}
 
-type userProfile struct {
-	ID    int    `json:"id"`
-	Name  string `json:"name"`
-	Age   int    `json:"age"`
-	Email string `json:"email"`
 }
