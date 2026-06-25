@@ -1,4 +1,4 @@
-# Simple Go HTTP Server
+# UPDATED-HTTP-SERVER-IN-GOLANG WITH ENCODING JSON
 
 A simple HTTP server written in Go that serves JSON responses from two different endpoints.
 
@@ -30,7 +30,7 @@ A simple HTTP server written in Go that serves JSON responses from two different
 Clone the repository:
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/chekus-dev/updated-http-server-in-golang.git
 ```
 
 Navigate into the project directory:
